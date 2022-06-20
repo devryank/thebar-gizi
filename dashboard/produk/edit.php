@@ -205,29 +205,40 @@
                 $nama = $_POST['nama'];
                 $harga = $_POST['harga'];
                 $kategori = $_POST['kategori'];
-                $foto = $_FILES['foto']['name'];
-                $x = explode('.', $foto);
-                $ekstensi = strtolower(end($x));
-                $ukuran    = $_FILES['foto']['size'];
-                $file_tmp = $_FILES['foto']['tmp_name'];
                 $folder = $_SERVER['DOCUMENT_ROOT'] . '/thebar-gizi/assets/img/' . $kategori . "/";
-                if (in_array($ekstensi, $ekstensi_diperbolehkan) === true) {
-                    if ($ukuran < 10000000) {
-                        move_uploaded_file($file_tmp, $folder . $foto);
-                        $sql = "UPDATE produk set nama = '$nama', 
+                if ($_FILES['foto']['name'] !== '') {
+                    $foto = $_FILES['foto']['name'];
+                    $x = explode('.', $foto);
+                    $ekstensi = strtolower(end($x));
+                    $ukuran    = $_FILES['foto']['size'];
+                    $file_tmp = $_FILES['foto']['tmp_name'];
+                    if (in_array($ekstensi, $ekstensi_diperbolehkan) === true) {
+                        if ($ukuran < 10000000) {
+                            move_uploaded_file($file_tmp, $folder . $foto);
+                            $sql = "UPDATE produk set nama = '$nama', 
                                                 harga = '$harga', 
                                                 foto = '$foto', 
                                                 kategori = '$kategori' WHERE id = " . $_GET['id'];
-                        if (mysqli_query($conn, $sql)) {
-                            echo "Update record successfully";
+                            if (mysqli_query($conn, $sql)) {
+                                echo "Update record successfully";
+                            } else {
+                                echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+                            }
                         } else {
-                            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+                            echo 'UKURAN FILE TERLALU BESAR';
                         }
                     } else {
-                        echo 'UKURAN FILE TERLALU BESAR';
+                        echo 'EKSTENSI FILE YANG DI UPLOAD TIDAK DI PERBOLEHKAN';
                     }
                 } else {
-                    echo 'EKSTENSI FILE YANG DI UPLOAD TIDAK DI PERBOLEHKAN';
+                    $sql = "UPDATE produk set nama = '$nama', 
+                                                harga = '$harga', 
+                                                kategori = '$kategori' WHERE id = " . $_GET['id'];
+                    if (mysqli_query($conn, $sql)) {
+                        echo "Update record successfully";
+                    } else {
+                        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+                    }
                 }
             }
             ?>
@@ -257,9 +268,9 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Kategori</label>
-                            <select name="kategori" class="form-control" name="kategori">
-                                <option value="food" <?php $row['kategori'] == 'food' ? 'selected' : ''; ?>>Makanan</option>
-                                <option value="drink" <?php $row['kategori'] == 'drink' ? 'selected' : ''; ?>>Minuman</option>
+                            <select class="form-control" name="kategori" autocomplete="off">
+                                <option value="food" <?= $row['kategori'] == 'food' ? 'selected' : ''; ?>>Makanan</option>
+                                <option value="drink" <?= $row['kategori'] == 'drink' ? 'selected' : ''; ?>>Minuman</option>
                             </select>
                         </div>
                         <button type="submit" name="submit" class="btn btn-primary">Submit</button>
