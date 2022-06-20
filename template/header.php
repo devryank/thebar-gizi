@@ -64,21 +64,21 @@ $base_url = "http://" . $_SERVER['SERVER_NAME'] . "/thebar-gizi";
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="<?= $base_url; ?>/dashboard/tables.html">
+                <a class="nav-link" href="<?= $base_url; ?>/dashboard/user/index.php">
                     <i class="fas fa-fw fa-user"></i>
                     <span>User</span></a>
             </li>
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="<?= $base_url; ?>/dashboard/charts.html">
+                <a class="nav-link" href="<?= $base_url; ?>/dashboard/transaksi/index.php">
                     <i class="fas fa-fw fa-cash-register"></i>
                     <span>Transaksi</span></a>
             </li>
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="<?= $base_url; ?>/dashboard/tables.html">
+                <a class="nav-link" href="<?= $base_url; ?>/dashboard/laporan/index.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Laporan</span></a>
             </li>
