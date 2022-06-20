@@ -1,3 +1,4 @@
+<?php require('config/koneksi.php'); ?>
 <!doctype html>
 <html lang="en">
 
@@ -49,91 +50,38 @@
 
         <div class="row">
             <h3 class="text-center">Makanan</h3>
-            <div class="col-lg-3 mt-4">
-                <a href="detail.php" class="card text-decoration-none">
-                    <img src="assets/img/food/nasi goreng gila-min.jpg" class="card-img-top" width="100%">
-                    <div class="card-body">
-                        <h5 class="card-title text-black">Nasi Goreng Gila</h5>
-                        <p class="card-text fw-bold text-primary">Rp 15.000</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-lg-3 mt-4">
-                <a href="detail.php" class="card text-decoration-none">
-                    <img src="assets/img/food/nasi goreng ayam-min.jpg" class="card-img-top" width="100%">
-                    <div class="card-body">
-                        <h5 class="card-title text-black">Nasi Goreng Ayam</h5>
-                        <p class="card-text fw-bold text-primary">Rp 13.000</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-lg-3 mt-4">
-                <a href="detail.php" class="card text-decoration-none">
-                    <img src="assets/img/food/nasi goreng bakso-min.jpg" class="card-img-top" width="100%">
-                    <div class="card-body">
-                        <h5 class="card-title text-black">Nasi Goreng Bakso</h5>
-                        <p class="card-text fw-bold text-primary">Rp 13.000</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-lg-3 mt-4">
-                <a href="detail.php" class="card text-decoration-none">
-                    <img src="assets/img/food/nasi goreng sosis-min.jpg" class="card-img-top" width="100%">
-                    <div class="card-body">
-                        <h5 class="card-title text-black">Nasi Goreng Sosis</h5>
-                        <p class="card-text fw-bold text-primary">Rp 13.000</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-lg-3 mt-4">
-                <a href="detail.php" class="card text-decoration-none">
-                    <img src="assets/img/food/mie rebus-min.jpg" class="card-img-top" width="100%">
-                    <div class="card-body">
-                        <h5 class="card-title text-black">Mie Rebus</h5>
-                        <p class="card-text fw-bold text-primary">Rp 13.000</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-lg-3 mt-4">
-                <a href="detail.php" class="card text-decoration-none">
-                    <img src="assets/img/food/mie goreng-min.jpg" class="card-img-top" width="100%">
-                    <div class="card-body">
-                        <h5 class="card-title text-black">Mie Goreng</h5>
-                        <p class="card-text fw-bold text-primary">Rp 13.000</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-lg-3 mt-4">
-                <a href="detail.php" class="card text-decoration-none">
-                    <img src="assets/img/food/seblak komplit.jpg" class="card-img-top" width="100%">
-                    <div class="card-body">
-                        <h5 class="card-title text-black">Seblak Komplit</h5>
-                        <p class="card-text fw-bold text-primary">Rp 10.000</p>
-                    </div>
-                </a>
-            </div>
+            <?php
+            $query = mysqli_query($conn, "SELECT * FROM produk where kategori = 'food'");
+            while ($data = mysqli_fetch_array($query)) :
+            ?>
+                <div class="col-lg-3 mt-4 d-flex align-items-stretch">
+                    <a href="detail.php" class="card text-decoration-none">
+                        <img src="<?= $base_url; ?>/assets/img/<?php echo $data['kategori'] . "/" . $data['foto'] ?>" class="card-img-top" width="100%" height="70%" style="object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title text-black"><?= $data['nama']; ?></h5>
+                            <p class="card-text fw-bold text-primary"><?php echo "Rp " . number_format($data['harga'], 0, ',', '.') ?></p>
+                        </div>
+                    </a>
+                </div>
+            <?php endwhile; ?>
         </div>
 
         <div class="row mt-5">
             <h3 class="text-center">Minuman</h3>
-            <div class="col-lg-3 mt-4">
-                <a href="detail.php" class="card text-decoration-none">
-                    <img src="assets/img/drink/ice-tea.jpg" class="card-img-top" width="100%">
-                    <div class="card-body">
-                        <h5 class="card-title text-black">Es Teh</h5>
-                        <p class="card-text fw-bold text-primary">Rp 5.000</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-lg-3 mt-4">
-                <a href="detail.php" class="card text-decoration-none">
-                    <img src="assets/img/drink/air-putih.jpg" class="card-img-top" width="100%">
-                    <div class="card-body">
-                        <h5 class="card-title text-black">Air Putih</h5>
-                        <p class="card-text fw-bold text-primary">Rp 3.000</p>
-                    </div>
-                </a>
-            </div>
+            <?php
+            $query = mysqli_query($conn, "SELECT * FROM produk where kategori = 'drink'");
+            while ($data = mysqli_fetch_array($query)) :
+            ?>
+                <div class="col-lg-3 mt-4 d-flex align-items-stretch">
+                    <a href="detail.php" class="card text-decoration-none">
+                        <img src="<?= $base_url; ?>/assets/img/<?php echo $data['kategori'] . "/" . $data['foto'] ?>" class="card-img-top" width="100%" height="70%" style="object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title text-black"><?= $data['nama']; ?></h5>
+                            <p class="card-text fw-bold text-primary"><?php echo "Rp " . number_format($data['harga'], 0, ',', '.') ?></p>
+                        </div>
+                    </a>
+                </div>
+            <?php endwhile; ?>
         </div>
         <h2 class="text-center my-5">SELAMAT MENIKMATI</h2>
     </div>
