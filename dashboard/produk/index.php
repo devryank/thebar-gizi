@@ -225,7 +225,7 @@
                                         <td><?php echo $no++ ?></td>
                                         <td><?php echo $data['nama'] ?></td>
                                         <td><img width="100px" src="<?= $base_url; ?>/assets/img/<?php echo $data['kategori'] . "/" . $data['foto'] ?>" alt=""></td>
-                                        <td><?php echo "Rp " . number_format($data['harga'], 2, ',', '.') ?></td>
+                                        <td><?php echo "Rp " . number_format($data['harga'], 0, ',', '.') ?></td>
                                         <td>
                                             <a href="<?= $base_url . '/dashboard/produk/edit.php/?id=' . $data['id']; ?>" class="btn btn-warning">Edit</a>
                                             <a href="<?= $base_url . '/dashboard/produk/hapus.php/?id=' . $data['id']; ?>" class="btn btn-danger">Hapus</a>
