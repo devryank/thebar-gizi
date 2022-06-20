@@ -1,5 +1,6 @@
 <?php
 
+session_start();
 $base_url = "http://" . $_SERVER['SERVER_NAME'] . "/thebar-gizi";
 $img_path = $_SERVER['DOCUMENT_ROOT'] . "/thebar-gizi/assets/img";
 $servername = "localhost";
