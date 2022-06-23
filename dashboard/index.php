@@ -1,4 +1,4 @@
-<?php include('../template/header.php'); ?>
+<?php include('../template/dashboard-header.php'); ?>
 <!-- Content Wrapper -->
 <div id="content-wrapper" class="d-flex flex-column">
 
@@ -504,4 +504,4 @@
 
     </div>
     <!-- End of Main Content -->
-    <?php include('../template/footer.php'); ?>
+    <?php include('../template/dashboard-footer.php'); ?>
