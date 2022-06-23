@@ -9,6 +9,7 @@ if (isset($_POST['submit'])) {
 
                 $_SESSION['peran'] = $row['peran'];
                 $_SESSION['id'] = $row['id'];
+                $_SESSION['nama'] = $row['nama'];
 
                 if ($row['peran'] == 'admin') {
                     header('location: http://localhost/thebar-gizi/dashboard');
