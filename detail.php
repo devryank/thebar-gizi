@@ -1,51 +1,72 @@
-<!doctype html>
-<html lang="en">
+<?php include('template/header.php'); ?>
+<?php
+$product_id = $_GET['id'];
+$result = mysqli_query($conn, "SELECT * FROM produk WHERE id=$product_id");
+$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-</head>
+if (isset($_POST['submit'])) {
+    $result_transaksi_terakhir_user = mysqli_query($conn, "SELECT kode_transaksi, status FROM transaksi WHERE DATE(tanggal) = CURDATE() AND id_user = " . $_SESSION['id'] . " ORDER BY tanggal DESC LIMIT 1");
+    $transaksi_terakhir_user = mysqli_fetch_array($result_transaksi_terakhir_user, MYSQLI_ASSOC);
 
-<body>
-    <div class="container">
-        <div class="row mt-3">
-            <div class="col-lg-6">
-                <h2>OLSHOP MAKANAN</h2>
-            </div>
-            <?php $is_login = true; ?>
+    $result_transaksi_terakhir_semua = mysqli_query($conn, "SELECT kode_transaksi FROM transaksi WHERE DATE(tanggal) = CURDATE() ORDER BY tanggal DESC LIMIT 1");
+    $transaksi_terakhir_semua = mysqli_fetch_array($result_transaksi_terakhir_semua, MYSQLI_ASSOC);
 
-            <div class="col-lg-6 text-end">
-                <?php if (!$is_login) : ?>
-                    <a href="" class="btn btn-primary">Login</a>
-                <?php else : ?>
-                    <a href="profile.php" class="align-middle">Ryan Kurniawan</a>
-                <?php endif; ?>
-            </div>
+    if ($transaksi_terakhir_semua == NULL) {
+        $kode_transaksi = "INV-" . date('Ymd') . "0001";
+    } else if ($transaksi_terakhir_user == NULL) {
+        $jumlah = $_POST['jumlah'];
+        $nomor = substr($transaksi_terakhir_semua['kode_transaksi'], -4);
+        $kode_transaksi = "INV-" . date('Ymd') . str_pad(intval($nomor) + 1, strlen($nomor), '0', STR_PAD_LEFT);
+        $user_id = $_SESSION['id'];
+        $total = $row['harga'] * $_POST['jumlah'];
+        $insert_transaksi = mysqli_query($conn, "INSERT INTO transaksi VALUES('$kode_transaksi', $user_id, $total, now(), 'proses')");
+        $insert_daftar_pembelian = mysqli_query($conn, "INSERT INTO daftar_pembelian VALUES(NULL, '$kode_transaksi', $product_id, $jumlah)");
+    } else {
+        $jumlah = $_POST['jumlah'];
+        if ($transaksi_terakhir_user['status'] == 'selesai') {
+            $nomor = substr($transaksi_terakhir_semua['kode_transaksi'], -4);
+            $kode_transaksi = "INV-" . date('Ymd') . str_pad(intval($nomor) + 1, strlen($nomor), '0', STR_PAD_LEFT);
+
+            $user_id = $_SESSION['id'];
+            $total = $row['harga'] * $_POST['jumlah'];
+            $insert_transaksi = mysqli_query($conn, "INSERT INTO transaksi VALUES('$kode_transaksi', $user_id, $total, now(), 'proses')");
+
+            $insert_daftar_pembelian = mysqli_query($conn, "INSERT INTO daftar_pembelian VALUES(NULL, '$kode_transaksi', $product_id, $jumlah)");
+            // if ($insert_transaksi && $insert_daftar_pembelian) {
+            //     echo 'berhasil';
+            // } else {
+            //     echo mysqli_error($conn);
+            // }
+        } else {
+            $kode_transaksi = $transaksi_terakhir_user['kode_transaksi'];
+            $insert_daftar_pembelian = mysqli_query($conn, "INSERT INTO daftar_pembelian VALUES(NULL, '$kode_transaksi', $product_id, $jumlah)");
+        }
+    }
+}
+?>
+<div class="card my-5 px-3 py-3">
+    <div class="row">
+        <div class="col-lg-3">
+            <img src="<?= $base_url; ?>/assets/img/<?php echo $row['kategori'] . "/" . $row['foto'] ?>" width="100%">
         </div>
-
-        <div class="card my-5 px-3 py-3">
-            <div class="row">
-                <div class="col-lg-3">
-                    <img src="assets/img/food/nasi goreng gila-min.jpg" width="100%">
-                </div>
-                <div class="col-lg-6">
-                    <h2>Nasi Goreng Gila</h2>
-                    <p class="fw-bold text-primary">Rp 15.000</p>
-                    <input type="number" class="form-control" placeholder="0" min="1" style="width: 100px;">
-                    <input type="submit" value="Pesan" class="btn btn-primary mt-2">
-                </div>
-                <div class="col-lg-3">
-                    <h3>Deskripsi</h3>
-                    <p>Nasi, telur, ayam, sosis, bakso, tomat, timun</p>
-                </div>
-            </div>
+        <div class="col-lg-6">
+            <h2><?= $row['nama']; ?></h2>
+            <p class="fw-bold text-primary"><?php echo "Rp " . number_format($row['harga'], 0, ',', '.') ?></p>
+            <form action="" method="post">
+                <input type="number" name="jumlah" class="form-control" placeholder="0" min="1" style="width: 100px;">
+                <input type="submit" name="submit" value="Pesan" class="btn btn-primary mt-2">
+            </form>
+        </div>
+        <div class="col-lg-3">
+            <h3>Deskripsi</h3>
+            <p><?= $row['deskripsi']; ?></p>
         </div>
     </div>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-</body>
-
-</html>
+</div>
+</div>
+<?php include('template/footer.php'); ?>
+<script>
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>
