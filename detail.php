@@ -11,10 +11,14 @@ if (isset($_POST['submit'])) {
     $result_transaksi_terakhir_semua = mysqli_query($conn, "SELECT kode_transaksi FROM transaksi WHERE DATE(tanggal) = CURDATE() ORDER BY tanggal DESC LIMIT 1");
     $transaksi_terakhir_semua = mysqli_fetch_array($result_transaksi_terakhir_semua, MYSQLI_ASSOC);
 
+    $jumlah = $_POST['jumlah'];
     if ($transaksi_terakhir_semua == NULL) {
         $kode_transaksi = "INV-" . date('Ymd') . "0001";
+        $user_id = $_SESSION['id'];
+        $total = $row['harga'] * $_POST['jumlah'];
+        $insert_transaksi = mysqli_query($conn, "INSERT INTO transaksi VALUES('$kode_transaksi', $user_id, $total, now(), 'proses')");
+        $insert_daftar_pembelian = mysqli_query($conn, "INSERT INTO daftar_pembelian VALUES(NULL, '$kode_transaksi', $product_id, $jumlah)");
     } else if ($transaksi_terakhir_user == NULL) {
-        $jumlah = $_POST['jumlah'];
         $nomor = substr($transaksi_terakhir_semua['kode_transaksi'], -4);
         $kode_transaksi = "INV-" . date('Ymd') . str_pad(intval($nomor) + 1, strlen($nomor), '0', STR_PAD_LEFT);
         $user_id = $_SESSION['id'];
@@ -22,7 +26,6 @@ if (isset($_POST['submit'])) {
         $insert_transaksi = mysqli_query($conn, "INSERT INTO transaksi VALUES('$kode_transaksi', $user_id, $total, now(), 'proses')");
         $insert_daftar_pembelian = mysqli_query($conn, "INSERT INTO daftar_pembelian VALUES(NULL, '$kode_transaksi', $product_id, $jumlah)");
     } else {
-        $jumlah = $_POST['jumlah'];
         if ($transaksi_terakhir_user['status'] == 'selesai') {
             $nomor = substr($transaksi_terakhir_semua['kode_transaksi'], -4);
             $kode_transaksi = "INV-" . date('Ymd') . str_pad(intval($nomor) + 1, strlen($nomor), '0', STR_PAD_LEFT);
@@ -35,7 +38,6 @@ if (isset($_POST['submit'])) {
             // if ($insert_transaksi && $insert_daftar_pembelian) {
             //     echo 'berhasil';
             // } else {
-            //     echo mysqli_error($conn);
             // }
         } else {
             $kode_transaksi = $transaksi_terakhir_user['kode_transaksi'];
