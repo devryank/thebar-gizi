@@ -23,7 +23,8 @@
                     <a href="<?= $base_url; ?>/auth/login.php" class="btn btn-primary">Login</a>
                 <?php else : ?>
                     <a href="profile.php" class="align-middle me-3"><?= $_SESSION['nama']; ?></a>
-                    <a href="keranjang.php" class="align-middle"><i class="fa-solid fa-cart-shopping"></i></a>
+                    <a href="keranjang.php" class="align-middle me-3"><i class="fa-solid fa-cart-shopping"></i></a>
+                    <a href="<?= $base_url;?>/action/logout.php" class="align-middle">Logout</i></a>
 
                 <?php endif; ?>
             </div>
