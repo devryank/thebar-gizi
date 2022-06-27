@@ -26,7 +26,7 @@ if (isset($_POST['submit'])) {
         $insert_transaksi = mysqli_query($conn, "INSERT INTO transaksi VALUES('$kode_transaksi', $user_id, $total, now(), 'proses')");
         $insert_daftar_pembelian = mysqli_query($conn, "INSERT INTO daftar_pembelian VALUES(NULL, '$kode_transaksi', $product_id, $jumlah)");
     } else {
-        if ($transaksi_terakhir_user['status'] == 'selesai') {
+        if ($transaksi_terakhir_user['status'] == 'pengiriman' OR $transaksi_terakhir_user['status'] == 'selesai') {
             $nomor = substr($transaksi_terakhir_semua['kode_transaksi'], -4);
             $kode_transaksi = "INV-" . date('Ymd') . str_pad(intval($nomor) + 1, strlen($nomor), '0', STR_PAD_LEFT);
 
