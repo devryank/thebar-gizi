@@ -1,10 +1,10 @@
+<?php include('template/header.php'); ?>
 <?php
     if($_SESSION['id'] == '') {
         header("location: $base_url/auth/login.php");
     }
 ?>
 
-<?php include('template/header.php'); ?>
 <?php
 $product_id = $_GET['id'];
 $result = mysqli_query($conn, "SELECT * FROM produk WHERE id=$product_id");
