@@ -1,4 +1,4 @@
 <?php
-session_start();
+include ('../config/koneksi.php');
 session_destroy();
-header('location: http://localhost/thebar-gizi');
+header("location: $base_url");
