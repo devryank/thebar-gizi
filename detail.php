@@ -1,3 +1,9 @@
+<?php
+    if($_SESSION['id'] == '') {
+        header("location: $base_url/auth/login.php");
+    }
+?>
+
 <?php include('template/header.php'); ?>
 <?php
 $product_id = $_GET['id'];
