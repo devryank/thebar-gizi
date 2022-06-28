@@ -12,9 +12,9 @@ if (isset($_POST['submit'])) {
                 $_SESSION['nama'] = $row['nama'];
 
                 if ($row['peran'] == 'admin') {
-                    header('location: http://localhost/thebar-gizi/dashboard');
+                    header("location: $base_url/dashboard");
                 } else {
-                    header('location: http://localhost/thebar-gizi');
+                    header("location: $base_url");
                 }
             } else {
                 $errors['password'] = $password == '' ? 'Kolom password kosong' : 'Password salah';
